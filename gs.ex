@@ -1,7 +1,7 @@
 defmodule gs do
 use GenServer
 
-
+ 
 
 # Вспомогательный метод для запуска
 def start_link do
