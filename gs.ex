@@ -1,22 +1,29 @@
 defmodule gs do
 use GenServer
 
- 
 
-# Вспомогательный метод для запуска
 def start_link do
-GenServer.start_link(__MODULE__, [], [{:gs, __MODULE__}])
+{:ok, pid} = GenServer.start_link(gs, [], [{:gs, __MODULE__}])
 end
 
-# Далее следуют функции обратного вызова,
-# которые используются модулем GenServer
 
+  def create(Name, Adress, Bissnes) do
+    GenServer.call(pid, {:create, Name, Adress, Bissnes})
+  end
+  
+  def read(Name) do
+	GenServer.call(pid, {:read , Name})
+  end
 
-#{:ok, table} = :dets.open_file(:disk_storage, [type: :set])
+  def close() do
+    GenServer.call(pid, {close})
+  end
+  
+  
 
 
 def init([]) do
-{:ok, :dets.open_file(:file_dets, [type: :set])}
+{:ok, :dets.open_file(:md, [type: :set])}
 end
 
 
@@ -25,17 +32,37 @@ end
 
 
 
-def handle_call(request, _from, state) do
-distance = request
-reply = {:ok, fall_velocity(distance)}
-new_state = %State{count: state.count + 1}
-{:reply, reply, new_state}
+def handle_call({:create, Name, Adress, Bissnes}, _from, state) do
+
+  def 
+  case :dets.lookup(md, Name)  do
+  [] ->
+  :dets.insert(md, {Name, Adress,Bissnes})
+  {reply, {oke}, State}
+  _else -> 
+  {:reply, {error}, State}
+  
+  end
+
 end
 
-def handle_cast(_msg, state) do
-IO.puts("So far, calculated #{state.count} velocities.")
-{:noreply, state}
+def handle_call({:read , Name}, _from, state) do
+  def
+  case :dets.lookup(md, Name)  do
+  [] ->
+  :dets.lookup(md, Name)
+  {:reply, {error}, State}
+  _else -> 
+  {:reply, :dets.lookup(md, Name), State}
+  end
+
 end
+
+def handle_call({close}, _From, State) do 
+    :dets.close(md)
+	{:reply, {okeKlose}, State}
+end
+
 
 def handle_info(_info, state) do
 {:noreply, state}
@@ -47,11 +74,6 @@ end
 
 def code_change(_old_version, state, _extra) do
 {:ok, state}
-end
-
-# Функция для внутреннего использования
-def fall_velocity(distance) do
-:math.sqrt(2 * 9.8 * distance)
 end
 
 end
