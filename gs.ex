@@ -37,7 +37,7 @@ defmodule gs do
 	{:reply, {error}, State}
     end
   end
-
+ 
   def handle_call({:read , Name}, _from, state) do
 	case :dets.lookup(md, Name)  do
 	[] ->
