@@ -1,10 +1,11 @@
 defmodule gs do
-use GenServer
+
+  use GenServer
 
 
-def start_link do
-{:ok, pid} = GenServer.start_link(gs, [], [{:gs, __MODULE__}])
-end
+  def start_link do
+	{:ok, pid} = GenServer.start_link(gs, [], [{:gs, __MODULE__}])
+  end
 
 
   def create(Name, Adress, Bissnes) do
@@ -16,64 +17,53 @@ end
   end
 
   def close() do
-    GenServer.call(pid, {close})
+    GenServer.call(pid, {:close})
   end
   
   
 
 
-def init([]) do
-{:ok, :dets.open_file(:md, [type: :set])}
-end
-
-
-#init([]) ->
-#  {ok, dets:open_file(md,  [{type, set}])}.
-
-
-
-def handle_call({:create, Name, Adress, Bissnes}, _from, state) do
-
-  def 
-  case :dets.lookup(md, Name)  do
-  [] ->
-  :dets.insert(md, {Name, Adress,Bissnes})
-  {reply, {oke}, State}
-  _else -> 
-  {:reply, {error}, State}
-  
+  def init([]) do
+	{:ok, :dets.open_file(:md, [type: :set])}
   end
 
-end
 
-def handle_call({:read , Name}, _from, state) do
-  def
-  case :dets.lookup(md, Name)  do
-  [] ->
-  :dets.lookup(md, Name)
-  {:reply, {error}, State}
-  _else -> 
-  {:reply, :dets.lookup(md, Name), State}
+  def handle_call({:create, Name, Adress, Bissnes}, _from, state) do
+	case :dets.lookup(md, Name)  do
+	[] ->
+	:dets.insert(md, {Name, Adress,Bissnes})
+	{reply, {oke}, State}
+	_else -> 
+	{:reply, {error}, State}
+    end
   end
 
-end
+  def handle_call({:read , Name}, _from, state) do
+	case :dets.lookup(md, Name)  do
+	[] ->
+	:dets.lookup(md, Name)
+	{:reply, {error}, State}
+	_else -> 
+	{:reply, :dets.lookup(md, Name), State}
+	end
+  end
 
-def handle_call({close}, _From, State) do 
-    :dets.close(md)
+  def handle_call({close}, _From, State) do 
+	:dets.close(md)	
 	{:reply, {okeKlose}, State}
-end
+  end
 
 
-def handle_info(_info, state) do
-{:noreply, state}
-end
+  def handle_info(_info, state) do
+	{:noreply, state}
+  end
 
-def terminate(_reason, _state) do
-{:ok}
-end
+  def terminate(_reason, _state) do
+	{:ok}
+  end
 
-def code_change(_old_version, state, _extra) do
-{:ok, state}
-end
+  def code_change(_old_version, state, _extra) do
+	{:ok, state}
+  end
 
 end
