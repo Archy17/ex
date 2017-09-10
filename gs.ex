@@ -48,7 +48,7 @@ defmodule Gs do
     end
   end
 
-  def handle_call({:close}, _From, State) do 
+  def handle_call({:close}, _From, state) do 
     :dets.close(:md)	
     {:reply, {:okeKlose}, state}
   end
