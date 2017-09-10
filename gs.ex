@@ -32,9 +32,9 @@ defmodule Gs do
     case :dets.lookup(:md, name)  do
       [] ->
         :dets.insert(:md, {name, adress,bissnes})
-        {reply, {oke}, state}
+        {:reply, {:oke}, state}
       _else -> 
-        {:reply, {error}, state}
+        {:reply, {:error}, state}
     end
   end
  
@@ -42,7 +42,7 @@ defmodule Gs do
     case :dets.lookup(:md, name)  do
       [] ->
         :dets.lookup(:md, name)
-        {:reply, {error}, state}
+        {:reply, {:error}, state}
       _else -> 
         {:reply, :dets.lookup(:md, name), state}
     end
@@ -50,7 +50,7 @@ defmodule Gs do
 
   def handle_call({:close}, _From, State) do 
     :dets.close(:md)	
-    {:reply, {okeKlose}, state}
+    {:reply, {:okeKlose}, state}
   end
 
 
