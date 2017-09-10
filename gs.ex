@@ -1,23 +1,23 @@
-defmodule gs do
+defmodule Gs do
 
   use GenServer
 
 
-  def start_link do
-    {:ok, pid} = GenServer.start_link(gs, [], [{:gs, __MODULE__}])
+  def start_link() do
+     :gen_server.start_link(__MODULE__,  [])
   end
 
 
   def create(Name, Adress, Bissnes) do
-    GenServer.call(pid, {:create, Name, Adress, Bissnes})
+    GenServer.call(Gs, {:create, name, adress, bissnes})
   end
   
   def read(Name) do
-    GenServer.call(pid, {:read , Name})
+    GenServer.call(Gs, {:read , name})
   end
 
   def close() do
-    GenServer.call(pid, {:close})
+    GenServer.call(Gs, {:close})
   end
   
   
@@ -28,29 +28,29 @@ defmodule gs do
   end
 
 
-  def handle_call({:create, Name, Adress, Bissnes}, _from, state) do
-    case :dets.lookup(md, Name)  do
+  def handle_call({:create, name, adress, bissnes}, _from, state) do
+    case :dets.lookup(:md, name)  do
       [] ->
-        :dets.insert(md, {Name, Adress,Bissnes})
-        {reply, {oke}, State}
+        :dets.insert(:md, {name, adress,bissnes})
+        {reply, {oke}, state}
       _else -> 
-        {:reply, {error}, State}
+        {:reply, {error}, state}
     end
   end
  
-  def handle_call({:read , Name}, _from, state) do
-    case :dets.lookup(md, Name)  do
+  def handle_call({:read , name}, _from, state) do
+    case :dets.lookup(:md, name)  do
       [] ->
-        :dets.lookup(md, Name)
-        {:reply, {error}, State}
+        :dets.lookup(:md, name)
+        {:reply, {error}, state}
       _else -> 
-        {:reply, :dets.lookup(md, Name), State}
+        {:reply, :dets.lookup(:md, name), state}
     end
   end
 
-  def handle_call({close}, _From, State) do 
-    :dets.close(md)	
-    {:reply, {okeKlose}, State}
+  def handle_call({:close}, _From, State) do 
+    :dets.close(:md)	
+    {:reply, {okeKlose}, state}
   end
 
 
