@@ -4,7 +4,11 @@ defmodule Gs do
 
 
   def start_link() do
-     :gen_server.start_link(__MODULE__,  [])
+  
+    GenServer.start_link(__MODULE__, :ok, [name: __MODULE__])
+  
+  
+       ##GenServer.start_link(__MODULE__, [])
   end
 
 
@@ -26,7 +30,8 @@ defmodule Gs do
   def init([]) do
     {:ok, :dets.open_file(:md, [type: :set])}
   end
-
+  
+  
 
   def handle_call({:create, name, adress, bissnes}, _from, state) do
     case :dets.lookup(:md, name)  do
