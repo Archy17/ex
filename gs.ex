@@ -12,7 +12,7 @@ defmodule Gs do
   end
 
 
-  def create(Name, Adress, Bissnes) do
+  def create(name, adress, bissnes) do
     GenServer.call(Gs, {:create, name, adress, bissnes})
   end
   
