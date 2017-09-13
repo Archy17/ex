@@ -16,7 +16,7 @@ defmodule Gs do
     GenServer.call(Gs, {:create, name, adress, bissnes})
   end
   
-  def read(Name) do
+  def read(name) do
     GenServer.call(Gs, {:read , name})
   end
 
